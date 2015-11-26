@@ -1,0 +1,25 @@
+/******************************************************************************
+ * Aiden - A RiveScript Chatbot Personality                                   *
+ *----------------------------------------------------------------------------*
+ * This source code is released under a Creative Commons                      *
+ * Attribution-ShareAlike International License.                              *
+ * (C) Noah Petherbridge 2015                                                 *
+ ******************************************************************************/
+
+/***
+ * Common arrays and synonyms for words.
+ ***/
+
+// Set arrays
+! array malenoun   = male guy boy dude boi man men gentleman gentlemen
+! array femalenoun = female girl chick woman women lady babe
+! array mennoun    = males guys boys dudes bois men gentlemen
+! array womennoun  = females girls chicks women ladies babes
+! array lol        = lol lmao rofl rotfl haha hahaha hah heh hehe
+! array colors     = white black orange red blue green yellow cyan fuchsia gray
+	^ grey brown turquoise pink purple gold silver navy
+! array height     = tall long wide thick
+! array measure    = inch in centimeter cm millimeter mm meter m inches
+	^ centimeters millimeters meters
+! array yes        = yes yeah yep yup ya yea
+! array no         = no nah nope nay
