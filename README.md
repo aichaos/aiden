@@ -14,6 +14,8 @@ on the AiChaos GitHub organization: <https://github.com/aichaos>.
 
 * Files beginning with `std-` are candidates for being included in the standard
   brain shipped with RiveScript implementations.
+* Files beginning with `data-` are larger data sets (usually in array form),
+  such as a listing of common first names.
 
 # License
 

@@ -5,6 +5,7 @@
  * Attribution-ShareAlike International License.                              *
  * (C) Noah Petherbridge 2015                                                 *
  ******************************************************************************/
+! version = 2.0
 
 /***
  * Substitutions

@@ -5,31 +5,124 @@
  * Attribution-ShareAlike International License.                              *
  * (C) Noah Petherbridge 2015                                                 *
  ******************************************************************************/
-
 ! version = 2.0
 
+// Number of times to persistently ask the same interview question before
+// giving up.
+! global interview_retry = 3
+
+! local concat = space
+
 > begin
-	+ request // This trigger is tested first.
-	- {ok}    // An {ok} in the response means it's okay to get a real reply
+	+ request
+	* <get isGroupChat> == true => {ok}  // Don't do interview in group chats
+	* <get met> != true => <set met=true>{topic=interview1}{ok}
+	- {ok}
 < begin
 
-// The Botmaster's Name
-! var master = localuser
++ reinterview me|interview me again
+- Okay I'll interview you again.
+^ <set met=false>{topic=interview2}What's your name?
 
-// Bot Variables
-! var name     = Aiden
-! var fullname = Aiden Rive
-! var age      = 5
-! var birthday = October 12
-! var sex      = male
-! var location = Michigan
-! var city     = Detroit
-! var eyes     = blue
-! var hair     = light brown
-! var hairlen  = short
-! var color    = blue
-! var band     = Nickelback
-! var book     = Myst
-! var author   = Stephen King
-! var job      = robot
-! var website  = www.rivescript.com
+> topic interview_common
+	// User can say "continue" at any time to cancel out of the interview.
+	+ [*] (continue|cancel|stop|quit) [*]
+	- Okay, let's just chat then. What's up?{topic=random}
+
+	+ int abort
+	- Nevermind then. What's up?{topic=random}
+
+	+ int help *
+	- If you don't want to tell me your <star>, just type "continue".
+	- Or just type "continue" if you don't want to tell me your <star>.
+< topic
+
+// Interview: ask the user their name.
+> topic interview1
+	+ *
+	- Hi there! My name is <bot name>. What's your name?
+	^ <set retry=0>{topic=interview2}
+< topic
+
+// Interview: user responds with their name. Try 5 times to get their answer
+// before giving up.
+> topic interview2 includes interview_common
+	+ * *
+	* <get retry> > <env interview_retry> => {@int giveup}
+	- I only want your first name. {@int help}
+	- Just tell me your first name. {@int help}
+	- Can I just get your first name? {@int help}
+
+	+ (@firstNames)
+	- <set name=<formal>>Your name is <get name>? Cool! Are you a boy or a girl?
+	^ <set retry=0>{topic=interview3}
+
+	+ *
+	* <get retry> > <env interview_retry> => {@int giveup}
+	- <set tmp=<formal>><add retry=1>Is that a real name? ({@int help})
+
+	+ [*] @yes [*]
+	% is that a real name *
+	- <set name=<get tmp>>Okay, then - I'll call you <get name>.
+	^ Well, are you a boy or a girl?
+	^ <set retry=0>{topic=interview3}
+
+	+ (my name is|call me|i am|im) *
+	@ <star2>
+
+	+ int giveup
+	- <set name=<id>>I'll just call you <get name>. Anyway, what's up?
+	^ {topic=random}
+
+	+ int help
+	- <add retry=1>{@int help name}
+< topic
+
+// Interview: user responds with their gender.
+> topic interview3 includes interview_common
+	+ @malenoun
+	* <bot gender> == male => Me too! How old are you?{@int male}
+	* <bot gender> == female => Cool! I'm a girl. How old are you?{@int male}
+	- Cool! I'm a <bot gender>. How old are you?{@int male}
+
+	+ @femalenoun
+	* <bot gender> == female => Me too! How old are you?{@int female}
+	* <bot gender> == male => Cool! I'm a boy. How old are you?{@int female}
+	- Cool! I'm a <bot gender>. How old are you?{@int female}
+
+	+ [i am|im] a (@malenoun|@femalenoun)
+	@ <star>
+
+	+ *
+	* <get retry> > <env interview_retry> => {@int abort}
+	- I asked if you're a boy or a girl? {@int help}
+	- So are you a boy or a girl? {@int help}
+
+	+ int help
+	- <add retry=1>{@int help gender}
+
+	+ int male
+	- <set gender=male><set retry=0>{topic=interview4}
+
+	+ int female
+	- <set gender=female><set retry=0>{topic=interview4}
+< topic
+
+// Interview: user responds with their age.
+> topic interview4 includes interview_common
+	+ #
+	- <set age=<star>>I'll remember that you're <get age> years old.
+	^ I'm <bot age>, myself. That's all the questions I have for now -- let's
+	^ chat. What's up?{topic=random}
+
+	+ (i am|im) # [years old]
+	@ <star2>
+
+	+ *
+	* <get retry> > <env interview_retry> => {@int abort}
+	- Tell me your age as a number. {@int help}
+	- Can you tell me your age as a number? {@int help}
+
+	+ int help
+	- <add retry=1>{@int help age}
+< topic

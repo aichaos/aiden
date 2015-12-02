@@ -1,0 +1,114 @@
+/******************************************************************************
+ * Aiden - A RiveScript Chatbot Personality                                   *
+ *----------------------------------------------------------------------------*
+ * This source code is released under a Creative Commons                      *
+ * Attribution-ShareAlike International License.                              *
+ * (C) Noah Petherbridge 2015                                                 *
+ ******************************************************************************/
+! version = 2.0
+
+/***
+ * Learn variables about the users.
+ ***/
+
+// Ask the user for something we don't know yet.
++ int ask user variable
+* <get name> == undefined => What's your name?
+* <get age> == undefined => How old are you?
+* <get gender> == undefined => Are you a boy or a girl?
+- {@int ask random question}
+
++ ask me [*] about myself|ask me [*] personal question
+@ int ask user variable
+
++ (@firstNames) [*]
+% [*] what is your name
+@ my name is <star>
+
++ #
+% [*] how old are you
+@ i am <star> years old
+
++ [*] (@malenoun|@femalenoun) [*]
+% [*] are you a boy or a girl
+@ i am a <star>
+
++ forget my (name|age|gender)
+- <set <star>=undefined>Forgotten.
+
++ forget everything about me
+- <set name=undefined>
+^ <set age=undefined>
+^ <set gender=undefined>
+^ I've forgotten everything I know about you.
+
+/* * * * * The Basics * * * * */
+
++ my name is (@firstNames)
+- <set name=<formal>><get name>, I will call you that from now on.
+- <set name=<formal>>Nice to meet you, <get name>.
+- <set name=<formal>>It's good to meet you, <get name>.
+
++ (call me|i am|i am called|im) (@firstNames) [*]
+@ my name is <star2>
+
++ my name is (<bot master>){weight=1}
+- <set name=<formal>>That's my master's name too.
+
++ (call me|i am|i am called|im) (<bot master>) [*]{weight=1}
+@ my name is <star2> // TODO https://github.com/aichaos/rivescript-go/issues/1
+
++ (call me|i am|i am called) * *
+- I only want to know your first name. Which one of those names do you want\s
+  ^ to go by?
+
++ (call me|i am|i am called) *
+- <set tmp={formal}<star2>{/formal}>Is that really your name?
+
++ [*] @yes [*]
+% is that really your name
+- <set name=<get tmp>>Okay then, I'll call you <get name>.
+- <set name=<get tmp>>Okay, I'll call you <get name> from now on.
+
++ (who am i|what is my name|do you know who i am|my name)
+* <get name> <> undefined => {random}Your name is <get name>.|
+  ^ I know your name is <get name>.|Aren't you <get name>?
+- You didn't tell me your name.
+- I don't know your name.
+
++ you do not know (me|my name|who i am)
+* <get name> <> undefined => Yes I do! {@who am i}
+- That's an accurate observation. What is your name?
+- You're right; what is your name?
+
++ i am # [years old]
+- <set age=<star>>I'll remember that you're <get age> years old.
+- <set age=<star>>Cool, you're <get age>. I'm <bot age> myself.
+- <set age=<star>>Cool; I'm <bot age>.
+- <set age=<star>>I'm <bot age>.
+
++ (how old am i|do you know how old i am|what is my age)
+* <get age> <> undefined => {random}You're <get age>.|You are <get age>.{/random}
+- I don't know how old you are. How old are you?
+- I don't know; how old are you?
+
++ (i am|im) [a] @malenoun
+* <bot gender> == male => <set gender=male>{random}I am too.|Me too!{/random}
+* <bot gender> == female => <set gender=male>Cool. I'm a girl.
+- <set gender=male>Cool; I'm a <bot gender>
+
++ (i am|im) [a] @femalenoun
+* <bot gender> == female => <set gender=female>{random}I am too.|Me too!{/random}
+* <bot gender> == male => <set gender=female>Cool. I'm a boy.
+- <set gender=male>Cool; I'm a <bot gender>
+
++ what (sex|gender) am i|what is my (sex|gender)
+* <get gender> == male => You're a {random}man|guy|boy{/random}.
+* <get gender> == female => You're a {random}woman|girl|lady{/random}.
+- I don't know what you are; are you a boy or a girl?
+
++ am i [a] @malenoun or [a] @femalenoun
+@ what gender am i
+
++ am i [a] @femalenoun or [a] @malenoun
+@ what gender am i
