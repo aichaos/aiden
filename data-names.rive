@@ -11,7 +11,7 @@
  * All the common first names ever.
  ***/
 
-! array firstNames = aaron aaron abbey abbie abby abdul abe abel abigail abraham
+! array first_names = aaron aaron abbey abbie abby abdul abe abel abigail abraham
     ^ abram ada adah adalberto adaline adam adam adan addie adela adelaida
     ^ adelaide adele adelia adelina adeline adell adella adelle adena adina
     ^ adolfo adolph adria adrian adrian adriana adriane adrianna adrianne adrien

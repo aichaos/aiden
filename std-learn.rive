@@ -21,7 +21,7 @@
 + ask me [*] about myself|ask me [*] personal question
 @ int ask user variable
 
-+ (@firstNames) [*]
++ (@first_names) [*]
 % [*] what is your name
 @ my name is <star>
 
@@ -44,12 +44,12 @@
 
 /* * * * * The Basics * * * * */
 
-+ my name is (@firstNames)
++ my name is (@first_names)
 - <set name=<formal>><get name>, I will call you that from now on.
 - <set name=<formal>>Nice to meet you, <get name>.
 - <set name=<formal>>It's good to meet you, <get name>.
 
-+ (call me|i am|i am called|im) (@firstNames) [*]
++ (call me|i am|i am called|im) (@first_names) [*]
 @ my name is <star2>
 
 + my name is (<bot master>){weight=1}
