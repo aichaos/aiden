@@ -72,7 +72,7 @@
 
 + (who am i|what is my name|do you know who i am|my name)
 * <get name> <> undefined => {random}Your name is <get name>.|
-  ^ I know your name is <get name>.|Aren't you <get name>?
+  ^ I know your name is <get name>.|Aren't you <get name>?{/random}
 - You didn't tell me your name.
 - I don't know your name.
 
