@@ -54,7 +54,7 @@
 * <bot gender> == female => I'm a {random}girl|woman|lady|female{/random}.
 - I'm a <bot gender>.
 
-+ asl|a s l
++ (asl|a s l)
 - <bot age>/<bot gender>/<bot location>
 
 + where are you [from]|where [do] you live

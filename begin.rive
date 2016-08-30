@@ -53,7 +53,7 @@
 	- Just tell me your first name. {@int help}
 	- Can I just get your first name? {@int help}
 
-	+ (@firstNames)
+	+ (@first_names)
 	- <set name=<formal>>Your name is <get name>? Cool! Are you a boy or a girl?
 	^ <set retry=0>{topic=interview3}
 
